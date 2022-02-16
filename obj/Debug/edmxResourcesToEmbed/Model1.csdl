@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Kayitlar">
+    <Key>
+      <PropertyRef Name="kayit_id" />
+    </Key>
+    <Property Name="kayit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kullanici_id" Type="Int32" />
+    <Property Name="kitap_id" Type="Int32" />
+    <Property Name="alis_tarihi" Type="DateTime" Precision="3" />
+    <Property Name="son_tarih" Type="DateTime" Precision="3" />
+    <Property Name="durum" Type="Boolean" />
+    <NavigationProperty Name="Kaynaklar" Relationship="Self.FK_Kayitlar_Kaynaklar" FromRole="Kayitlar" ToRole="Kaynaklar" />
+    <NavigationProperty Name="kullanıcılar" Relationship="Self.FK_Kayitlar_kullanıcılar" FromRole="Kayitlar" ToRole="kullanıcılar" />
+  </EntityType>
+  <EntityType Name="Kaynaklar">
+    <Key>
+      <PropertyRef Name="kaynak_id" />
+    </Key>
+    <Property Name="kaynak_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kaynak_ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="kaynak_yazar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="kaynak_yayıncı" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="kaynak_sayfasayisi" Type="Int32" />
+    <Property Name="kaynak_basımtarihi" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Kayitlar" Relationship="Self.FK_Kayitlar_Kaynaklar" FromRole="Kaynaklar" ToRole="Kayitlar" />
+  </EntityType>
+  <EntityType Name="kullanıcılar">
+    <Key>
+      <PropertyRef Name="kullanici_id" />
+    </Key>
+    <Property Name="kullanici_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kullanici_ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="kullanıcı_soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="kullanici_tc" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="kullanici_email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="kullanici_tel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="kullanici_ceza" Type="Double" />
+    <Property Name="kullanici_cinsiyet" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Kayitlar" Relationship="Self.FK_Kayitlar_kullanıcılar" FromRole="kullanıcılar" ToRole="Kayitlar" />
+  </EntityType>
+  <EntityType Name="Personeller">
+    <Key>
+      <PropertyRef Name="personel_id" />
+    </Key>
+    <Property Name="personel_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="personel_ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="personel_soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="personel_tc" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="personel_tel" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="personel_mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="personel_kullanıcıAdı" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="personel_şifre" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Kayitlar_Kaynaklar">
+    <End Role="Kaynaklar" Type="Self.Kaynaklar" Multiplicity="0..1" />
+    <End Role="Kayitlar" Type="Self.Kayitlar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kaynaklar">
+        <PropertyRef Name="kaynak_id" />
+      </Principal>
+      <Dependent Role="Kayitlar">
+        <PropertyRef Name="kitap_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kayitlar_kullanıcılar">
+    <End Role="kullanıcılar" Type="Self.kullanıcılar" Multiplicity="0..1" />
+    <End Role="Kayitlar" Type="Self.Kayitlar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="kullanıcılar">
+        <PropertyRef Name="kullanici_id" />
+      </Principal>
+      <Dependent Role="Kayitlar">
+        <PropertyRef Name="kullanici_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Kutuphane_OtomasyonuEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Kayitlar" EntityType="Self.Kayitlar" />
+    <EntitySet Name="Kaynaklar" EntityType="Self.Kaynaklar" />
+    <EntitySet Name="kullanıcılar" EntityType="Self.kullanıcılar" />
+    <EntitySet Name="Personeller" EntityType="Self.Personeller" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_Kayitlar_Kaynaklar" Association="Self.FK_Kayitlar_Kaynaklar">
+      <End Role="Kaynaklar" EntitySet="Kaynaklar" />
+      <End Role="Kayitlar" EntitySet="Kayitlar" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kayitlar_kullanıcılar" Association="Self.FK_Kayitlar_kullanıcılar">
+      <End Role="kullanıcılar" EntitySet="kullanıcılar" />
+      <End Role="Kayitlar" EntitySet="Kayitlar" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
